@@ -26,15 +26,12 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         <li class="nav-item">
           <a class="nav-link text-dark" href="./premiaciones.php">Premiaciones</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="#">sedes</a>
-        </li>
         <div class="btn-group" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <?php
                     if (isset($_SESSION['seguridad']) && $_SESSION['seguridad']['login']) {
-                      $texto = "Usuario: ";
-                      echo '<span class="ms-1 d-none d-sm-inline">' . $texto .$_SESSION['seguridad']['usuario'] . '</span>';
+                      $usuario = $_SESSION['seguridad']['nombres'] .' ' . $_SESSION['seguridad']['apellidos'];
+                      echo '<span class="ms-1 d-none d-sm-inline">' . $usuario .'</span>';
                     }
                   ?>
           </button>

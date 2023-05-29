@@ -74,7 +74,7 @@ if(isset($_SESSION['seguridad']) && $_SESSION['seguridad']['login']){
         parametros.append("correo", correo.value);
         parametros.append("clave", clave.value);
 
-        fetch("./controller/usuario.controller.php",{
+        fetch("./controller/persona.controller.php",{
           method:"POST",
           body: parametros
         })

@@ -29,24 +29,57 @@ BEGIN
 	ORDER BY fecharealizada DESC;
 END $$
 
-SELECT * FROM eventos WHERE idevento = 1
+DELIMITER $$
+CREATE PROCEDURE spu_sedes_listar()
+BEGIN
+	SELECT idsede, nombreSede 
+	FROM sedes
+	ORDER BY idsede;
+END $$
 
+DELIMITER $$
+CREATE PROCEDURE spu_disciplinas_listar()
+BEGIN
+	SELECT iddisciplina, nombreDisciplina
+	FROM disciplinas
+	ORDER BY iddisciplina;
+END $$
 
-SELECT
-    e.idevento,
-    e.nombreEvento,
-    s.idsede,
-    e.fecharealizada,
-    d.nombreDisciplina,
-    CONCAT(p_oro.apellidos, ' ', p_oro.nombres) AS nombreOro,
-    CONCAT(p_plata.apellidos, ' ', p_plata.nombres) AS nombrePlata,
-    CONCAT(p_bronce.apellidos, ' ', p_bronce.nombres) AS nombreBronce
-FROM eventos e
-INNER JOIN sedes s ON e.idsede = s.idsede
-INNER JOIN disciplinas d ON e.iddisciplina = d.iddisciplina
-INNER JOIN participantes par_oro ON e.oro = par_oro.idparticipante
-INNER JOIN personas p_oro ON par_oro.idpersona = p_oro.idpersona
-INNER JOIN participantes par_plata ON e.plata = par_plata.idparticipante
-INNER JOIN personas p_plata ON par_plata.idpersona = p_plata.idpersona
-INNER JOIN participantes par_bronce ON e.bronce = par_bronce.idparticipante
-INNER JOIN personas p_bronce ON par_bronce.idpersona = p_bronce.idpersona;
+DELIMITER $$
+CREATE PROCEDURE spu_participantes_listar()
+BEGIN
+	SELECT idparticipante, concat(personas.`apellidos`, ' ' ,personas.`nombres`) as nombrecompleto
+	FROM participantes
+	inner join personas on personas.`idpersona` = participantes.`idpersona`
+	ORDER BY personas.`apellidos`;
+END $$s
+
+delimiter $$ 
+create procedure spu_registrar_evento
+(
+	in _nombreEvento			VARCHAR(50),
+	in _idsede					INT, 
+	in _fecharealizada 		CHAR(4),
+	in _iddisciplina			INT,
+	in _oro 					INT, 
+	in _plata 					INT, 
+	in _bronce 				INT 
+)
+begin 
+	insert into eventos (nombreEvento, idsede, fecharealizada, iddisciplina, oro, plata, bronce) values
+	(_nombreEvento, _idsede, _fecharealizada, _iddisciplina, _oro, _plata, _bronce);
+end $$
+
+-- call spu_registrar_evento( 'Copa Peru 2023', 2, '2023', 6, 11,12,10);
+
+delimiter $$
+create procedure spu_ver_detEvento
+(
+	in _id int
+)
+begin 
+	select idparticipante, (SELECT CONCAT (nombres, ' ',apellidos) FROM personas WHERE idpersona = dt.idparticipante) AS participante
+		from det_eventos dt
+		where idevento = _id
+		order by idparticipante;
+end $$

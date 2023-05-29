@@ -31,6 +31,7 @@ CREATE TABLE `delegaciones` (
 /*Data for the table `delegaciones` */
 
 insert  into `delegaciones`(`iddelegacion`,`departamento`,`provincia`) values 
+(17,' Madre de Dios','Manu'),
 (1,'Amazonas','Chachapoyas'),
 (2,'Ancash','Huaraz'),
 (3,'Apurimac','Abancay'),
@@ -47,14 +48,13 @@ insert  into `delegaciones`(`iddelegacion`,`departamento`,`provincia`) values
 (14,'Lambayeque','Chiclayo'),
 (15,'Lima','Lima'),
 (16,'loreto','Ucayali'),
-(17,'Madre de Dios','Manu'),
 (18,'Moquegua','Llo'),
 (19,'Pasco','Pasco'),
 (20,'Piura','Piura'),
 (21,'Puno','Puno'),
 (22,'San Martin','Tocache'),
 (23,'Tacna','Tacna'),
-(24,'Tumbres','Tumbes'),
+(24,'Tumbres','Tumbres'),
 (25,'Ucayali','Atalaya');
 
 /*Table structure for table `det_eventos` */
@@ -70,21 +70,28 @@ CREATE TABLE `det_eventos` (
   KEY `fk_idpar_eve` (`idparticipante`),
   CONSTRAINT `fk_ideve_eve` FOREIGN KEY (`idevento`) REFERENCES `eventos` (`idevento`),
   CONSTRAINT `fk_idpar_eve` FOREIGN KEY (`idparticipante`) REFERENCES `participantes` (`idparticipante`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `det_eventos` */
 
 insert  into `det_eventos`(`iddetevento`,`idevento`,`idparticipante`) values 
 (1,1,1),
-(2,2,1),
-(3,3,2),
-(4,4,5),
-(5,5,4),
-(6,1,1),
-(7,2,1),
-(8,3,2),
-(9,4,5),
-(10,5,4);
+(2,1,2),
+(3,1,4),
+(4,2,2),
+(5,2,3),
+(6,2,4),
+(7,3,1),
+(8,3,4),
+(9,3,5),
+(10,4,5),
+(11,4,3),
+(12,4,1),
+(13,5,5),
+(14,5,2),
+(15,5,4),
+(16,5,1),
+(17,5,3);
 
 /*Table structure for table `disciplinas` */
 
@@ -108,8 +115,8 @@ insert  into `disciplinas`(`iddisciplina`,`tipo`,`nombreDisciplina`) values
 (5,'V','Baloncesto'),
 (6,'V','Béisbol'),
 (7,'V','BMX'),
-(9,'V','Lucha'),
-(8,'V','Natacion');
+(8,'V','Lucha'),
+(9,'V','Natacion');
 
 /*Table structure for table `eventos` */
 
@@ -120,20 +127,33 @@ CREATE TABLE `eventos` (
   `nombreEvento` varchar(50) NOT NULL,
   `idsede` int(11) NOT NULL,
   `fecharealizada` char(4) NOT NULL,
+  `iddisciplina` int(11) NOT NULL,
+  `oro` int(11) NOT NULL,
+  `plata` int(11) NOT NULL,
+  `bronce` int(11) NOT NULL,
   PRIMARY KEY (`idevento`),
   UNIQUE KEY `uk_eventos` (`nombreEvento`),
+  UNIQUE KEY `uk_year_eve` (`fecharealizada`),
+  KEY `fk_oro_eve` (`oro`),
+  KEY `fk_plata_eve` (`plata`),
+  KEY `fk_bronce_eve` (`bronce`),
   KEY `fk_id_eve` (`idsede`),
-  CONSTRAINT `fk_id_eve` FOREIGN KEY (`idsede`) REFERENCES `sedes` (`idsede`)
+  KEY `fk_iddis_usu` (`iddisciplina`),
+  CONSTRAINT `fk_bronce_eve` FOREIGN KEY (`bronce`) REFERENCES `participantes` (`idparticipante`),
+  CONSTRAINT `fk_id_eve` FOREIGN KEY (`idsede`) REFERENCES `sedes` (`idsede`),
+  CONSTRAINT `fk_iddis_usu` FOREIGN KEY (`iddisciplina`) REFERENCES `disciplinas` (`iddisciplina`),
+  CONSTRAINT `fk_oro_eve` FOREIGN KEY (`oro`) REFERENCES `participantes` (`idparticipante`),
+  CONSTRAINT `fk_plata_eve` FOREIGN KEY (`plata`) REFERENCES `participantes` (`idparticipante`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `eventos` */
 
-insert  into `eventos`(`idevento`,`nombreEvento`,`idsede`,`fecharealizada`) values 
-(1,'Copa peru',2,'2021'),
-(2,'Olimpiadas juveniles',1,'2020'),
-(3,'Juegos olimpicos',4,'2019'),
-(4,'Amigos del barrio',7,'2018'),
-(5,'Juegos provinciales',5,'2017');
+insert  into `eventos`(`idevento`,`nombreEvento`,`idsede`,`fecharealizada`,`iddisciplina`,`oro`,`plata`,`bronce`) values 
+(1,'Copa peru',2,'2021',1,1,3,5),
+(2,'Olimpiadas juveniles',1,'2020',4,6,2,5),
+(3,'Juegos olimpicos',4,'2019',6,9,14,11),
+(4,'Amigos del barrio',7,'2018',8,8,13,10),
+(5,'Juegos provinciales',5,'2017',3,3,11,9);
 
 /*Table structure for table `participantes` */
 
@@ -143,24 +163,30 @@ CREATE TABLE `participantes` (
   `idparticipante` int(11) NOT NULL AUTO_INCREMENT,
   `idpersona` int(11) NOT NULL,
   `iddelegacion` int(11) NOT NULL,
-  `iddisciplina` int(11) NOT NULL,
   PRIMARY KEY (`idparticipante`),
   KEY `fk_idper_par` (`idpersona`),
   KEY `fk_iddel_par` (`iddelegacion`),
-  KEY `fk_iddis_usu` (`iddisciplina`),
   CONSTRAINT `fk_iddel_par` FOREIGN KEY (`iddelegacion`) REFERENCES `delegaciones` (`iddelegacion`),
-  CONSTRAINT `fk_iddis_usu` FOREIGN KEY (`iddisciplina`) REFERENCES `disciplinas` (`iddisciplina`),
   CONSTRAINT `fk_idper_par` FOREIGN KEY (`idpersona`) REFERENCES `personas` (`idpersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `participantes` */
 
-insert  into `participantes`(`idparticipante`,`idpersona`,`iddelegacion`,`iddisciplina`) values 
-(1,7,15,1),
-(2,3,11,3),
-(3,5,2,5),
-(4,9,4,2),
-(5,1,8,6);
+insert  into `participantes`(`idparticipante`,`idpersona`,`iddelegacion`) values 
+(1,1,2),
+(2,2,11),
+(3,3,1),
+(4,4,4),
+(5,5,15),
+(6,6,9),
+(7,7,10),
+(8,8,25),
+(9,9,14),
+(10,10,20),
+(11,11,6),
+(12,12,7),
+(13,13,18),
+(14,14,13);
 
 /*Table structure for table `personas` */
 
@@ -184,14 +210,14 @@ CREATE TABLE `personas` (
 insert  into `personas`(`idpersona`,`apellidos`,`nombres`,`documentoIdentidad`,`nroDoId`,`correo`,`telefono`,`estado`) values 
 (1,'Luque','Johan','N','71789712','luquejohan194@gmail.com',NULL,'1'),
 (2,'Quispe','Piero','N','11111112','quispe36@gmail.com',NULL,'1'),
-(3,'Polo','Andy','N','11111113','polo24@gmail.com','963258746','1'),
+(3,'Polo','Andy','N','11111113','polo24@gmail.com',NULL,'1'),
 (4,'Urruti','Luis','E','111111144444','urruti11@gmail.com',NULL,'1'),
 (5,'Carvallo','Aurelio','N','11111115','carvallo1@gmail.com',NULL,'1'),
 (6,'Corzo','Aldo','N','11111116','corzo29@gmail.com',NULL,'1'),
 (7,'Riveros','Wilian','E','111111177777','riveros3@gmail.com',NULL,'1'),
 (8,'Di benedetto','Mathias','E','111111188888','mathias4@gmail.com',NULL,'1'),
-(9,'Cabanillas','Nelson','N','11111119','cabanillas27@gmail.com',NULL,'1'),
-(10,'Calcaterra','Horacio','E','111111202020','calcaterra10@gmail.com','903164785','1'),
+(9,'Cabanillas','Nelson','N','11111119','cabanillas27@gmail.com','903164785','1'),
+(10,'Calcaterra','Horacio','E','111111202020','calcaterra10@gmail.com',NULL,'1'),
 (11,'Perez','Matin','N','11111121','martin16@gmail.com',NULL,'1'),
 (12,'Ureña','Rodrigo','E','111111222222','rodrigo18@gmail.com',NULL,'1'),
 (13,'Valera','Alex','N','11111123','valera20@gmail.com',NULL,'1'),
@@ -214,11 +240,11 @@ CREATE TABLE `sedes` (
 
 insert  into `sedes`(`idsede`,`nombreSede`,`direccion`,`tipo`) values 
 (1,'Mauro Mina','Av. Bombon Coronado','U'),
-(2,'Bombon Coronado','HVHF+2VP, Chincha Alta 11701','P'),
-(3,'Balconcito','HVQ3+9WR, Sunampe 11703','U'),
-(4,'Polideportivo Chincha','Av. Santos Nagaro 299','P'),
-(5,'Complejo Deportivo de Los pinos','Guillermo Dansey 2270, Lima 15081','P'),
-(6,'Complejo Deportivo Héctor Chumpitaz','Av. Morales Duárez 1540, Lima 07006','U'),
+(2,'Bombon Coronado','Chincha Alta 11701','P'),
+(3,'Balconcito','Sunampe 11703','U'),
+(4,'Polideportivo de Chincha','Av. Santos Nagaro 299','P'),
+(5,'Los pinos','Guillermo Dansey 2270, Lima 15081','P'),
+(6,'Héctor Chumpitaz','Av. Morales Duárez 1540, Lima 07006','P'),
 (7,'Estadio Monumental U Marathon','Av. Javier Prado Este 7700, Ate 15026','U');
 
 /*Table structure for table `usuarios` */
@@ -239,11 +265,32 @@ CREATE TABLE `usuarios` (
 /*Data for the table `usuarios` */
 
 insert  into `usuarios`(`idusuario`,`idpersona`,`usuario`,`clave`,`estado`) values 
-(1,7,'RiveroWily','12345','1'),
-(2,9,'CabaNel','12345','1'),
+(1,7,'RiveroWily','$2y$10$9ccFmEeHI6RDM3g51IA33OyOfRS7wh5QOBlErkyCPOCvn1YPrPSRK','1'),
+(2,9,'CabaNel','$2y$10$9ccFmEeHI6RDM3g51IA33OyOfRS7wh5QOBlErkyCPOCvn1YPrPSRK','1'),
 (3,1,'LuJo','$2y$10$9ccFmEeHI6RDM3g51IA33OyOfRS7wh5QOBlErkyCPOCvn1YPrPSRK','1'),
-(4,3,'PoAn','12345','1'),
-(5,5,'Carau','12345','1');
+(4,3,'PoAn','$2y$10$9ccFmEeHI6RDM3g51IA33OyOfRS7wh5QOBlErkyCPOCvn1YPrPSRK','1'),
+(5,5,'Carau','$2y$10$9ccFmEeHI6RDM3g51IA33OyOfRS7wh5QOBlErkyCPOCvn1YPrPSRK','1');
+
+/* Procedure structure for procedure `spu_eventos_listar` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `spu_eventos_listar` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_eventos_listar`()
+BEGIN
+	SELECT e.idevento, e.nombreEvento, 
+		s.`nombreSede` 'nombreSede', e.fecharealizada, d.`nombreDisciplina`,
+		(SELECT CONCAT (nombres, ' ',apellidos)FROM personas WHERE idpersona = e.oro) AS Oro,
+		(SELECT CONCAT (nombres, ' ',apellidos)FROM personas WHERE idpersona = e.plata) AS Plata,
+		(SELECT CONCAT (nombres, ' ',apellidos)FROM personas WHERE idpersona = e.bronce) AS Bronce
+		FROM eventos e
+	INNER JOIN sedes  s ON s.`idsede` = e.`idsede`
+	INNER JOIN disciplinas d ON d.iddisciplina = e.`iddisciplina`
+	-- inner join participantes p on p.idparticipante = e.oro
+	ORDER BY fecharealizada DESC;
+END */$$
+DELIMITER ;
 
 /* Procedure structure for procedure `spu_login_corre` */
 
@@ -252,14 +299,14 @@ insert  into `usuarios`(`idusuario`,`idpersona`,`usuario`,`clave`,`estado`) valu
 DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_login_corre`(
-	in _correo varchar(50)
+	IN _correo VARCHAR(50)
 )
-begin 
-	select idusuario,personas.`apellidos` 'apellidos', personas.`nombres` 'nombres', personas.`correo` 'correo', usuario, clave
-	from usuarios
-	inner join personas on personas.`idpersona` = usuarios.`idpersona`
-	where personas.`correo` = _correo; 
-end */$$
+BEGIN 
+	SELECT idusuario,personas.`apellidos` 'apellidos', personas.`nombres` 'nombres', personas.`correo` 'correo', usuario, clave
+	FROM usuarios
+	INNER JOIN personas ON personas.`idpersona` = usuarios.`idpersona`
+	WHERE personas.`correo` = _correo; 
+END */$$
 DELIMITER ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

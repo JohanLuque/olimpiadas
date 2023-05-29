@@ -1,10 +1,10 @@
 <?php
 session_start(); 
 
-require_once '../model/Usuario.php';
+require_once '../model/Persona.php';
 
 if(isset($_POST['operacion'])){
-  $usuario = new Usuario();
+  $persona = new Persona();
 
 
   if($_POST['operacion'] == 'iniciarSesion'){
@@ -13,11 +13,10 @@ if(isset($_POST['operacion'])){
         "login"         => false,
         "apellidos"     =>"",
         "nombres"       =>"",
-        "usuario"       =>"",
         "mensaje"       =>""
     ];
 
-    $data = $usuario->iniciarSesion($_POST['correo']);
+    $data = $persona->iniciarSesion($_POST['correo']);
     $claveIngresada = $_POST['clave'];
     
     if($data){
@@ -26,7 +25,6 @@ if(isset($_POST['operacion'])){
             $acceso["login"] = true;
             $acceso["apellidos"] = $data["apellidos"];
             $acceso["nombres"] = $data["nombres"];
-            $acceso["usuario"] = $data["usuario"];
         }else{
             $acceso["mensaje"] = "Contraseña incorrecta";
         }

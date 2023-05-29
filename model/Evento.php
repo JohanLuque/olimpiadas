@@ -10,12 +10,21 @@ Class Evento extends Conexion{
     }
 
     public function listarEventos(){
-        try {
-            $consulta = $this->conexion->prepare("CALL spu_eventos_listar()");
-            $consulta->execute();
-            return $consulta->fetchAll(PDO::FETCH_ASSOC);
-          } catch(Exception $e) {
-            die($e->getMessage());
-          }
+      try {
+          $consulta = $this->conexion->prepare("CALL spu_eventos_listar()");
+          $consulta->execute();
+          return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch(Exception $e) {
+          die($e->getMessage());
+        }
+    }
+    public function registrarEvento(){
+      try {
+        $consulta = $this->conexion->prepare("CALL spu_registrar_evento(?,?,?,?,?,?,?)");
+        $consulta->execute();
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+      } catch(Exception $e) {
+        die($e->getMessage());
+      }
     }
 }
