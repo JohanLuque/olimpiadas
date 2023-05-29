@@ -1,16 +1,11 @@
 <?php
-//session_start(); 
+session_start(); 
 
 require_once '../model/Usuario.php';
 
 if(isset($_POST['operacion'])){
   $usuario = new Usuario();
 
-  if($_POST['operacion'] == 'destroy'){
-    session_destroy();
-    session_unset();
-    header('Location: ../index.html');
-  }
 
   if($_POST['operacion'] == 'iniciarSesion'){
 
@@ -33,14 +28,23 @@ if(isset($_POST['operacion'])){
             $acceso["nombres"] = $data["nombres"];
             $acceso["usuario"] = $data["usuario"];
         }else{
-            $acceso["mensaje"] = "Error en la contraseña";
+            $acceso["mensaje"] = "Contraseña incorrecta";
         }
     }else{
-        $acceso["mensaje"] = "Usuario no encontrado";
+        $acceso["mensaje"] = "No existe el usuario";
     }
 
     $_SESSION['seguridad'] = $acceso;
     //$_SESSION['inicio'] = date('c');
     echo json_encode($acceso);
+    }
+
 }
-}
+
+if (isset($_GET['operacion'])) {
+    if ($_GET['operacion'] == 'destroy') {
+      session_destroy();
+      session_unset();
+      header('Location:../index.php');
+    }
+  }

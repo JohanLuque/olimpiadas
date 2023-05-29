@@ -1,5 +1,6 @@
-CREATE DATABASE olimpiadas
-USE olimpiadas
+DROP DATABASE olimpiadas;
+CREATE DATABASE olimpiadas;
+USE olimpiadas;
 
 CREATE TABLE sedes
 (
@@ -37,7 +38,7 @@ CREATE TABLE personas
 	telefono 				CHAR(9) NULL,
 	estado					CHAR(1) NOT NULL DEFAULT '1',
 	CONSTRAINT uk_docId_per UNIQUE (documentoIdentidad, nroDoId, correo)
-) ENGINE = INNODB
+) ENGINE = INNODB;
 
 CREATE TABLE usuarios
 (
@@ -55,10 +56,10 @@ CREATE TABLE participantes
 	idparticipante		INT PRIMARY KEY AUTO_INCREMENT,
 	idpersona			INT NOT NULL,
 	iddelegacion		INT NOT NULL,
-	iddisciplina		INT NOT NULL,
+	-- iddisciplina		INT NOT NULL,
 	CONSTRAINT fk_idper_par FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
-	CONSTRAINT fk_iddel_par FOREIGN KEY (iddelegacion) REFERENCES delegaciones (iddelegacion),
-	CONSTRAINT fk_iddis_usu FOREIGN KEY (iddisciplina) REFERENCES disciplinas (iddisciplina)
+	CONSTRAINT fk_iddel_par FOREIGN KEY (iddelegacion) REFERENCES delegaciones (iddelegacion)
+	-- CONSTRAINT fk_iddis_usu FOREIGN KEY (iddisciplina) REFERENCES disciplinas (iddisciplina)
 ) ENGINE = INNODB;
 
 CREATE TABLE eventos
@@ -66,16 +67,25 @@ CREATE TABLE eventos
 	idevento 		INT PRIMARY KEY AUTO_INCREMENT,
 	nombreEvento	VARCHAR(50) NOT NULL,
 	idsede			INT NOT NULL,
-	fecharealizada	DATETIME NOT NULL DEFAULT NOW(),
+	fecharealizada	CHAR(4) NOT NULL,
+	iddisciplina		INT NOT NULL,
+	oro 				INT NOT NULL,
+	plata 				INT NOT NULL,
+	bronce 				INT NOT NULL,
+	CONSTRAINT fk_oro_eve FOREIGN KEY (oro) REFERENCES participantes (idparticipante),
+	CONSTRAINT fk_plata_eve FOREIGN KEY (plata) REFERENCES participantes (idparticipante),
+	CONSTRAINT fk_bronce_eve FOREIGN KEY (bronce) REFERENCES participantes (idparticipante),
 	CONSTRAINT fk_id_eve FOREIGN KEY (idsede) REFERENCES sedes (idsede),
-	CONSTRAINT uk_eventos UNIQUE(nombreEvento)
-)ENGINE = INNODB;
+	CONSTRAINT uk_eventos UNIQUE(nombreEvento),
+	CONSTRAINT uk_year_eve UNIQUE(fecharealizada),
+	CONSTRAINT fk_iddis_usu FOREIGN KEY (iddisciplina) REFERENCES disciplinas (iddisciplina)
+) ENGINE = INNODB;
 
 CREATE TABLE det_eventos
 (
 	iddetevento			INT PRIMARY KEY AUTO_INCREMENT,
-	idevento				INT NOT NULL,
-	idparticipante 	INT NOT NULL,
+	idevento			INT NOT NULL,
+	idparticipante 			INT NOT NULL,
 	CONSTRAINT fk_ideve_eve FOREIGN KEY (idevento) REFERENCES eventos (idevento),
 	CONSTRAINT fk_idpar_eve FOREIGN KEY (idparticipante) REFERENCES participantes (idparticipante)
 ) ENGINE = INNODB;
