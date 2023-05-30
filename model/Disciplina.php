@@ -10,10 +10,12 @@ class Disciplina extends Conexion{
         $this->conexion = parent::getConexion();
     }
 
-    public function listarDisciplinas(){
+    public function listarDisciplinas($id){
     try{
-        $consulta = $this->conexion->prepare("CALL spu_disciplinas_listar()");
-        $consulta->execute();
+        $consulta = $this->conexion->prepare("CALL spu_listar_disciplinas(?)");
+        $consulta->execute(array(
+          $id['idolimpiada']
+        ));
         return $consulta->fetchAll(PDO::FETCH_NUM);
     }catch(Exception $e){
       die($e->getMessage());

@@ -34,9 +34,9 @@ CREATE TABLE olimpiadas
 (
 	idolimpiada 		INT PRIMARY KEY AUTO_INCREMENT,
 	nombre				VARCHAR(50) NOT NULL,
-	fechainicio			DATE NOT NULL DEFAULT NOW(),
+	fechainicio			DATE NOT NULL,
 	fechafin				DATE NULL,
-	lugar					INT NOT NULL,
+	lugar					VARCHAR(50) NOT NULL,
 	CONSTRAINT uk_year_oli UNIQUE(fechainicio)
 ) ENGINE = INNODB;
 
@@ -49,14 +49,21 @@ CREATE TABLE det_disciplinas
 	CONSTRAINT fk_iddis_det FOREIGN KEY (iddisciplina) REFERENCES disciplinas (iddisciplina)
 ) ENGINE = INNODB;
 
+CREATE TABLE equipos
+(
+	idequipo 			INT PRIMARY KEY AUTO_INCREMENT,
+	iddelegacion 		INT NOT NULL,
+	idparticipante 	INT NOT NULL,
+	CONSTRAINT fk_idpar_equ FOREIGN KEY (idparticipante) REFERENCES personas (idpersona),
+	CONSTRAINT fk_iddel_equ FOREIGN KEY (iddelegacion) REFERENCES delegaciones (iddelegacion)
+) ENGINE = INNODB;
+
 CREATE TABLE integrantes
 (
 	idintegrante			INT PRIMARY KEY AUTO_INCREMENT,
-	iddelegacion			INT NOT NULL,
-	idparticipante			INT NOT NULL,
+	idequipo					INT NOT NULL,
 	iddet 					INT NOT NULL,
-	CONSTRAINT fk_idpar_int FOREIGN KEY (idparticipante) REFERENCES personas (idpersona),
-	CONSTRAINT fk_iddel_int FOREIGN KEY (iddelegacion) REFERENCES delegaciones (iddelegacion),
+	CONSTRAINT fk_idequ_int FOREIGN KEY (idequipo) REFERENCES equipos (idequipo),
 	CONSTRAINT fk_iddet_int FOREIGN KEY (iddet) REFERENCES det_disciplinas (iddet)
 ) ENGINE = INNODB;
 
@@ -65,6 +72,5 @@ CREATE TABLE medalleros
 	idmedallero				INT PRIMARY KEY AUTO_INCREMENT,
 	idintegrante			INT NOT NULL,
 	puesto 					TINYINT NOT NULL,
-	CONSTRAINT fk_id_med FOREIGN KEY (idintegrante) REFERENCES integrantes (idintegrante),
-	CONSTRAINT uk_med UNIQUE(puesto)
+	CONSTRAINT fk_id_med FOREIGN KEY (idintegrante) REFERENCES integrantes (idintegrante)
 ) ENGINE = INNODB;

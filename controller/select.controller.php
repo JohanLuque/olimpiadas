@@ -1,5 +1,5 @@
 <?php
-require_once '../model/Sedes.php';
+require_once '../model/Olimpiada.php';
 require_once '../model/Disciplina.php';
 require_once '../model/Participante.php';
 
@@ -11,17 +11,20 @@ function renderJSON($object = []){
 
 if(isset($_POST['operacion'])){
   switch($_POST['operacion']){
-    case 'listarSedes':
-      $sedes = new Sedes();
-      renderJSON($sedes->listarSedes());
+    case 'listarOlimpiadasFecha':
+      $olimpiada = new Olimpiada();
+      renderJSON($olimpiada->listarOlimpiadasFechas());
       break;
     case 'listarDisciplinas':
-      $disciplinas = new Disciplina();
-      renderJSON($disciplinas->listarDisciplinas());
+      $disciplina = new Disciplina();
+      $filtro=[
+        "idolimpiada" =>$_POST["idolimpiada"]
+      ];
+      renderJSON($disciplina->listarDisciplinas($filtro));
       break;
     case 'listarParticipantes':
-      $participantes = new Participante();
-      renderJSON($participantes->listarParticipantes());
+      $participante = new Participante();
+      renderJSON($participante->listarParticipantes());
       break;
   }
 }

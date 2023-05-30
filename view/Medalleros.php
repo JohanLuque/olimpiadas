@@ -28,7 +28,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           <a class="nav-link text-dark" aria-current="page" href="./dashboard.php">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active bg-warning" href="./premiaciones.php">Premiaciones</a>
+          <a class="nav-link active bg-warning" href="./Medalleros.php">Premiaciones</a>
         </li>
         <div class="btn-group" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -40,7 +40,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
                   ?>
           </button>
           <div class="dropdown-menu" aria-labelledby="triggerId">
-              <a class="dropdown-item" href="../controller/usuario.controller.php?operacion=destroy">Cerrar sesión</a>
+              <a class="dropdown-item" href="../controller/persona.controller.php?operacion=destroy">Cerrar sesión</a>
             </div>
         </div><!-- fin de goup button -->
       </ul><!-- fin de nav -->
@@ -48,7 +48,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
 </div> <!-- fin de container -->
 
 <div class="container">
-    <div class="row mt-5">
+    <div class="row mt-5 mb-3">
         <div class="col-md-8 text-center">
         <h1>Premiaciones</h1>
         </div>
@@ -58,6 +58,32 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
             </div>
         </div>
     </div>
+    <div class="row">
+      <div class="col-md-5 mt-2">
+        <div class="form-floating">
+          <select name="fecha" id="fecha" class="form-select">
+            <option value="">Seleccione</option>
+          </select>
+          <label for="fecha">Fecha</label>
+        </div>
+      </div>
+      <div class="col-md-5 mt-2">
+        <div class="form-floating">
+          <select name="disciplinas" id="disciplinas" class="form-select">
+            <option value="">Seleccione</option>
+          </select>
+          <label for="disciplinas">Disicplina</label>
+        </div>
+      </div>
+      <div class="col-md-2 mt-4">
+        <div class="d-grid">
+          <button class="btn btn-secondary" type="button" id="buscar">Buscar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-danger mt-5" role="alert" id="alerta"></div>
+
     <div class="row mt-3">
         <div class="row row-cols-2 row-cols-sm-3 g-2 mt-3" id="cards">
             <!-- Contenedor de cards -->
@@ -119,38 +145,8 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success">Participantes</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- fin de modal -->
-
-<!-- inicio modal ver participantes -->
-<div class="modal fade" id="modal-ver-participantes" tabindex="-1" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalTitleId">Participantes</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="">
-          <table class="table table-striped mt-4" id="tabla-participantes">
-            <thead>
-              <th>ID</th>
-              <th>Nombres y apellidos</th>
-            </thead>
-            <tbody>
-              <!-- llenado asincrono -->
-            </tbody>
-          </table>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -162,27 +158,27 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
   document.addEventListener("DOMContentLoaded", () =>{
     
     const contenido = document.querySelector("#cards");
-    const lisSedes = document.querySelector("#sedes");
-    const lisDisciplinas = document.querySelector("#disciplina");
-    const lisOro = document.querySelector("#oro");
-    const lisPlata = document.querySelector("#plata");
-    const lisBronce = document.querySelector("#bronce");
-    const btAbriParticipantes = document.querySelector("#modal-ver-participantes");
-    const tbParticipantes = document.querySelector("#tabla-participantes");
-    const tbBody = document.querySelector("tbody");
+    const listDisciplinas = document.querySelector("#disciplinas");
+    const listFecha = document.querySelector("#fecha");
+    const btBuscar = document.querySelector("#buscar");
+    const alerta = document.querySelector("#alerta");
 
-    let id = 0;
+    alerta.classList.add('d-none');
 
-    function listarEventos() {
+    function listarMedalleros() {
       const parametros = new URLSearchParams();
-      parametros.append("operacion", "listarEventos");
+      parametros.append("operacion", "listarMedalleros");
+      parametros.append("iddisciplina", parseInt(listDisciplinas.value));
+      parametros.append("idolimpiada", parseInt(listFecha.value));
 
-      fetch("../controller/evento.controller.php", {
+      fetch("../controller/medallero.controller.php", {
         method: 'POST',
         body: parametros
       })
         .then(response => response.json())
         .then(datos => {
+          alerta.classList.remove('d-block');
+          alerta.classList.add('d-none');
           contenido.innerHTML = '';
           datos.forEach(element => {
             const urlImg = "../img/logo.png";
@@ -191,15 +187,13 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
               <div class="card mb-3">
                 <img src="${urlImg}" class="card-img-top" alt="...">
                 <div class="card-body">
-                  <h4 class="card-title text-center">${element.nombreEvento}</h4>
+                  <h4 class="card-title text-center">${element.nombreDisciplina}</h4>
                   <hr>
-                  <h5 class="card-subtitle mb-2 bg-oro">Oro: ${element.Oro}</h5>
-                  <h6 class="card-subtitle mb-2 bg-plata">Plata: ${element.Plata}</h6>
-                  <h6 class="card-subtitle mb-2 bg-bronce">Bronce: ${element.Bronce}</h6>
-                  <p class="card-text"><small class="text-muted
-                  ">Sede: ${element.nombreSede}</small></p>
-                  <p class="card-text text-center"><small class="text-muted">${element.fecharealizada}</small></p>
-                  <button type="button" class="evento btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#modal-ver-participantes" data-idevento='${element.idevento}'">Ver participantes</button>
+                  <h5 class="card-subtitle mb-2">Puesto: ${element.puesto}</h5>
+                  <h6 class="card-subtitle mb-2">Participante: ${element.nommbreCompleto}</h6>
+                  <h6 class="card-subtitle mb-2">Delegacion: ${element.nombreDelegacion}</h6>
+                  <p class="card-text"><small class="text-muted">lugar: ${element.lugar}</small></p>
+                  <p class="card-text text-center"><small class="text-muted">${element.fecha}</small></p>
                 </div>
               </div>
             </div>
@@ -207,6 +201,10 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
             contenido.innerHTML += card;
           });
         })
+        .catch(erro =>{
+          alertaError();
+          //alert("Nose encuentran los datos");
+        });
     }
 
     function listarSelect(operacion = "", objectSelect){
@@ -227,18 +225,45 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           });
     }
 
-    listarSelect("listarSedes", lisSedes);
-    listarSelect("listarDisciplinas", lisDisciplinas);
-    listarSelect("listarParticipantes", lisOro);
-    listarSelect("listarParticipantes", lisPlata);
-    listarSelect("listarParticipantes", lisBronce);
+    function alertaError(){
+              contenido.innerHTML = '';
+              alerta.classList.remove('d-none');
+              alerta.classList.add('d-block');
+              alerta.classList.add('alert-danger');
+              alerta.innerHTML = "No hay datos por mostrar";
+    }
 
-    listarEventos();
-    btAbriParticipantes.addEventListener('click', (event) => {
-          if(event.target.classList[0] === 'evento'){
-            id = parseInt(event.target.dataset.idevento);
-          }
+    function rellenar(){
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", "listarDisciplinas");
+        parametros.append("idolimpiada",parseInt(listFecha.value));
+
+
+        fetch('../controller/select.controller.php',{
+          method: 'POST',
+          body:parametros
+        })
+        .then(response => response.json())
+        .then(datos => {
+          listDisciplinas.innerHTML = `<option value="">Seleccione</option>`;
+          datos.forEach(disciplina => {
+            const option = document.createElement('option');
+            option.value = disciplina[0];
+            option.text = disciplina[1];
+            listDisciplinas.appendChild(option);
+          });
+        })
+        .catch(error => {
+          alertaError();
         });
+    }
+
+    listarSelect("listarOlimpiadasFecha", listFecha);
+
+    btBuscar.addEventListener("click", listarMedalleros);
+
+    listFecha.addEventListener("change", rellenar);
+
   });
 </script>
 </body>

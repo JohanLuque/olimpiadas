@@ -25,8 +25,8 @@ if(isset($_SESSION['seguridad']) && $_SESSION['seguridad']['login']){
    <form action="" id="form-login" class="form-control needs-validation" novalidate>
    <div class="alert alert-danger" role="alert" id="alerta"></div>
     <div class="row">
-        <div class="col-md-8 mt-4 mb-4 bg-secondary">
-            <img src="./img/logo.png" alt="" class="" class="img-fluid img-thumbnail">
+        <div class="col-md-8 mt-4 mb-4 text-center">
+            <img src="./img/logo.png" alt="" class="">
         </div>
         <div class="col-md-4 mt-4 ">
           <h1>Hola!!</h1>

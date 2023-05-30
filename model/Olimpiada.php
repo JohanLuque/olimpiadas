@@ -2,7 +2,7 @@
 
 require_once 'Conexion.php';
 
-class Sedes extends Conexion{
+class Olimpiada extends Conexion{
 
     private $conexion;
 
@@ -10,9 +10,9 @@ class Sedes extends Conexion{
         $this->conexion = parent::getConexion();
     }
 
-    public function listarSedes(){
+    public function listarOlimpiadasFechas(){
     try{
-        $consulta = $this->conexion->prepare("CALL spu_sedes_listar()");
+        $consulta = $this->conexion->prepare("CALL spu_listar_olimpiadas()");
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_NUM);
     }catch(Exception $e){

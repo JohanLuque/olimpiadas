@@ -24,7 +24,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           <a class="nav-link active bg-warning" aria-current="page" href="./dashboard.php">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="./premiaciones.php">Premiaciones</a>
+          <a class="nav-link text-dark" href="./Medalleros.php">Premiaciones</a>
         </li>
         <div class="btn-group" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,7 +36,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
                   ?>
           </button>
           <div class="dropdown-menu" aria-labelledby="triggerId">
-              <a class="dropdown-item" href="../controller/usuario.controller.php?operacion=destroy">Cerrar sesión</a>
+              <a class="dropdown-item" href="../controller/persona.controller.php?operacion=destroy">Cerrar sesión</a>
             </div>
         </div><!-- fin de goup button -->
       </ul><!-- fin de nav -->

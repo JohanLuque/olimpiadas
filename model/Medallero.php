@@ -1,7 +1,7 @@
 <?php
 require_once 'Conexion.php';
 
-Class Evento extends Conexion{
+Class Medallero extends Conexion{
     private $conexion;
 
     // Contructor
@@ -9,10 +9,13 @@ Class Evento extends Conexion{
         $this->conexion = parent::getConexion();
     }
 
-    public function listarEventos(){
+    public function listarMedalleros($datos=[]){
       try {
-          $consulta = $this->conexion->prepare("CALL spu_eventos_listar()");
-          $consulta->execute();
+          $consulta = $this->conexion->prepare(" CALL spu_lista_medallero(?,?)");
+          $consulta->execute(array(
+            $datos['iddisciplina'],
+            $datos['idolimpiada']
+          ));
           return $consulta->fetchAll(PDO::FETCH_ASSOC);
         } catch(Exception $e) {
           die($e->getMessage());
