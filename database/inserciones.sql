@@ -27,15 +27,15 @@ INSERT INTO delegaciones (nombreDelegacion) VALUES
 	 ('Tumbres'),
 	 ('Atalaya');
 INSERT INTO disciplinas (nombreDisciplina) VALUES	
-('Futbol'),
+('Fútbol'),
 ('Volley'),
-('Skeleton'),
-('Atletismo'),
+('Balon Mano'),
+('Atletismo Relevo'),
 ('Baloncesto'),
 ('Béisbol'),
-('BMX'),
-('Lucha'),
-('Natacion');
+('Fútbol americano '),
+('Hockey'),
+('Water Polo');
 
 
 INSERT INTO personas (apellidos, nombres, dni, correo, clave) VALUES
@@ -92,27 +92,60 @@ INSERT INTO det_disciplinas (idolimpiada, iddisciplina) VALUES
 (5, 7),
 (5, 8);
 
-INSERT INTO integrantes (iddelegacion, idparticipante, iddet) VALUES
-(11,1,1),
-(10,2,1),
-(9,3,1),
-(8,4,1),
-(7,5,2),
-(7,6,2),
-(7,7,2),
-(7,8,2),
-(7,9,2);
+/*select iddet,olimpiadas.`nombre`, disciplinas.`nombreDisciplina` 
+from det_disciplinas
+inner join disciplinas on disciplinas.`iddisciplina` = det_disciplinas.`iddisciplina`
+inner join olimpiadas on olimpiadas.`idolimpiada` = det_disciplinas.`idolimpiada`
+order by iddet*/
 
+INSERT INTO equipos (iddelegacion, idparticipante) VALUES
+(11,1),
+(11,2),
+(11,3),
+(10,4),
+(3,7),
+(3,8),
+(4,11),
+(4,12),
+(7,5),
+(7,6),
+(7,7),
+(7,8),
+(7,9),
+(1,10),
+(1,11),
+(1,12);
+
+INSERT INTO integrantes (idequipo, iddet) VALUES
+(1,1),-- futboll
+(2,1),-- futboll
+(3,1),-- futboll
+(4,1),-- futboll
+(5,1),-- futboll
+(6,1),-- futboll
+(7,1),-- futboll
+(8,1),-- futboll
+(9,1),-- futboll
+(1,3),
+(2,3),
+(3,3);
+
+
+/*select personas.`apellidos`, personas.`nombres`, delegaciones.`nombreDelegacion` from equipos
+inner join personas on personas.`idpersona` = equipos.`idparticipante`
+inner join delegaciones on delegaciones.`iddelegacion` = equipos.`iddelegacion`*/
 
 
 INSERT INTO medalleros (idintegrante, puesto)VALUES
 (1,1),
-(2,2),
-(3,3),
-(4,4),
-(5,5),
+(5,2),
+(7,3);
+/*(5,5),
 (6,1),
 (7,2),
 (8,3),
-(9,4);
+(9,4),
+(10,1),
+(11,2),
+(12,3);*/
 

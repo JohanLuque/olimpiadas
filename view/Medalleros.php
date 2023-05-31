@@ -101,7 +101,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="" autocomplete="off" id="formulario-eventos">
+        <!-- <form action="" autocomplete="off" id="formulario-eventos">
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="nombre" autofocus maxlength="50">
             <label for="nombre">Nombre del evento</label>
@@ -142,7 +142,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
               </select>
             </div>
           </div>
-        </form>
+        </form> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -190,7 +190,6 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
                   <h4 class="card-title text-center">${element.nombreDisciplina}</h4>
                   <hr>
                   <h5 class="card-subtitle mb-2">Puesto: ${element.puesto}</h5>
-                  <h6 class="card-subtitle mb-2">Participante: ${element.nommbreCompleto}</h6>
                   <h6 class="card-subtitle mb-2">Delegacion: ${element.nombreDelegacion}</h6>
                   <p class="card-text"><small class="text-muted">lugar: ${element.lugar}</small></p>
                   <p class="card-text text-center"><small class="text-muted">${element.fecha}</small></p>

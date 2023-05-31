@@ -27,8 +27,9 @@ BEGIN
 		olimpiadas.`lugar` AS lugar
 		FROM medalleros
 		INNER JOIN integrantes ON integrantes.idintegrante = medalleros.idintegrante
-		INNER JOIN personas ON personas.idpersona = integrantes.idparticipante
-		INNER JOIN delegaciones ON delegaciones.iddelegacion = integrantes.iddelegacion
+		INNER JOIN equipos ON equipos.`idequipo`  = integrantes.`idintegrante`
+		INNER JOIN personas ON personas.idpersona = equipos.idparticipante
+		INNER JOIN delegaciones ON delegaciones.iddelegacion = equipos.iddelegacion
 		INNER JOIN det_disciplinas ON det_disciplinas.`iddet` =  integrantes.`iddet`
 		INNER JOIN olimpiadas ON olimpiadas.`idolimpiada` = det_disciplinas.`idolimpiada`
 		INNER JOIN disciplinas ON disciplinas.`iddisciplina` =  det_disciplinas.`iddisciplina`
@@ -36,7 +37,6 @@ BEGIN
 		GROUP BY disciplinas.`nombreDisciplina`, puesto
 		ORDER BY puesto;
 END $$
-CALL SPU_lista_medallero(2,1);
 
 DELIMITER $$
 CREATE PROCEDURE spu_listar_disciplinas
@@ -51,7 +51,6 @@ BEGIN
 	WHERE olimpiadas.`idolimpiada` = _idolimpiada;
 END $$
 
-CALL spu_listar_disciplinas(2)
 
 DELIMITER $$
 CREATE PROCEDURE spu_listar_olimpiadas()
@@ -71,9 +70,19 @@ BEGIN
 	(_idparticipante, _puesto);
 END$$
 
-CALL spu_registrar_medallero();
 
 
-SELECT * FROM integrantes
-
-
+		SELECT idmedallero,disciplinas.`nombreDisciplina`, delegaciones.`nombreDelegacion`,
+		puesto,
+		YEAR(olimpiadas.`fechainicio`) AS fecha,
+		olimpiadas.`lugar` AS lugar
+		FROM medalleros
+		INNER JOIN integrantes ON integrantes.idintegrante = medalleros.idintegrante
+		INNER JOIN equipos ON equipos.`idequipo`  = integrantes.`idintegrante`
+		INNER JOIN personas ON personas.idpersona = equipos.idparticipante
+		INNER JOIN delegaciones ON delegaciones.iddelegacion = equipos.iddelegacion
+		INNER JOIN det_disciplinas ON det_disciplinas.`iddet` =  integrantes.`iddet`
+		INNER JOIN olimpiadas ON olimpiadas.`idolimpiada` = det_disciplinas.`idolimpiada`
+		INNER JOIN disciplinas ON disciplinas.`iddisciplina` =  det_disciplinas.`iddisciplina`
+		GROUP BY delegaciones.`nombreDelegacion`, puesto
+		ORDER BY puesto;
