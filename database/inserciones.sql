@@ -24,7 +24,7 @@ INSERT INTO delegaciones (nombreDelegacion) VALUES
 	 ('Puno'),
 	 ('Tocache'),
 	 ('Tacna'),
-	 ('Tumbres'),
+	 ('Tumbes'),
 	 ('Atalaya');
 INSERT INTO disciplinas (nombreDisciplina) VALUES	
 ('Fútbol'),
@@ -75,22 +75,12 @@ INSERT INTO det_disciplinas (idolimpiada, iddisciplina) VALUES
 (2, 8),
 (3, 9),
 (3, 5),
-(3, 4),
-(3, 3),
-(3, 2),
 (4, 1),
 (4, 8),
 (4, 7),
-(4, 9),
-(4, 5),
 (5, 4),
 (5, 3),
-(5, 2),
-(5, 1),
-(5, 6),
-(5, 5),
-(5, 7),
-(5, 8);
+(5, 2);
 
 /*select iddet,olimpiadas.`nombre`, disciplinas.`nombreDisciplina` 
 from det_disciplinas
@@ -99,36 +89,56 @@ inner join olimpiadas on olimpiadas.`idolimpiada` = det_disciplinas.`idolimpiada
 order by iddet*/
 
 INSERT INTO equipos (iddelegacion, idparticipante) VALUES
-(11,1),
+(11,1),-- futbol
 (11,2),
-(11,3),
 (10,4),
 (3,7),
-(3,8),
-(4,11),
+(3,8), -- futbol
+(4,11), -- volley 6
 (4,12),
 (7,5),
 (7,6),
-(7,7),
-(7,8),
-(7,9),
-(1,10),
+(8,7),
+(8,8),
+(9,9),-- volley 12
+(1,10),-- balon mano
 (1,11),
-(1,12);
+(5,12), -- balon mano 15
+(2,1), -- Atletismo relevado
+(2,3), 
+(6,4),
+(6,5), -- Atletismo relevado 19
+(24,9), -- Baloncesto
+(24,10),
+(23,3),
+(23,7),
+(23,8); -- Baloncesto 24
 
 INSERT INTO integrantes (idequipo, iddet) VALUES
 (1,1),-- futboll
-(2,1),-- futboll
-(3,1),-- futboll
-(4,1),-- futboll
-(5,1),-- futboll
-(6,1),-- futboll
-(7,1),-- futboll
-(8,1),-- futboll
-(9,1),-- futboll
-(1,3),
-(2,3),
-(3,3);
+(2,1),
+(3,1),
+(4,1),
+(5,1),-- futboll 5
+(6,1),-- volley
+(7,2),
+(8,2),
+(9,2),
+(10,2),
+(11,2),
+(12,2),-- volley 12
+(13,3),-- valon mano
+(14,3),
+(15,3),-- valon mano 15
+(16,4),-- atletismo
+(17,4),
+(18,4),
+(19,4),-- atletismo 19
+(20,5),-- Baloncesto 
+(21,5),
+(22,5),
+(23,5),
+(24,5);-- Baloncesto 24
 
 
 /*select personas.`apellidos`, personas.`nombres`, delegaciones.`nombreDelegacion` from equipos
@@ -136,16 +146,19 @@ inner join personas on personas.`idpersona` = equipos.`idparticipante`
 inner join delegaciones on delegaciones.`iddelegacion` = equipos.`iddelegacion`*/
 
 
-INSERT INTO medalleros (idintegrante, puesto)VALUES
-(1,1),
-(5,2),
-(7,3);
-/*(5,5),
-(6,1),
-(7,2),
-(8,3),
-(9,4),
-(10,1),
-(11,2),
-(12,3);*/
+INSERT INTO medalleros (idintegrante, puesto, estado)VALUES
+(1,1,'1'), -- futbol
+(3,2,'1'),-- futbol
+(5,3,'1'),-- futbol
+(7,1,'1'),-- volley
+(9,2,'1'),-- volley
+(11,3,'1'),-- volley
+(12,4,'1'),-- volley
+(13,1,'1'),-- balon
+(15,2,'1');-- balon
 
+INSERT INTO medalleros (idintegrante) VALUES
+(16),
+(18),
+(20),
+(22);

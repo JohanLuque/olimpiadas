@@ -11,20 +11,24 @@ Class Medallero extends Conexion{
 
     public function listarMedalleros($datos=[]){
       try {
-          $consulta = $this->conexion->prepare(" CALL spu_lista_medallero(?,?)");
+          $consulta = $this->conexion->prepare(" CALL spu_lista_medallero(?,?,?)");
           $consulta->execute(array(
             $datos['iddisciplina'],
-            $datos['idolimpiada']
+            $datos['idolimpiada'],
+            $datos['estado']
           ));
           return $consulta->fetchAll(PDO::FETCH_ASSOC);
         } catch(Exception $e) {
           die($e->getMessage());
         }
     }
-    public function registrarEvento(){
+    public function premiarMedallero($datos=[]){
       try {
-        $consulta = $this->conexion->prepare("CALL spu_registrar_evento(?,?,?,?,?,?,?)");
-        $consulta->execute();
+        $consulta = $this->conexion->prepare("CALL spu_premiar_medallero(?,?)");
+        $consulta->execute(array(
+          $datos['idmedallero'],
+          $datos['puesto']
+        ));
         return $consulta->fetchAll(PDO::FETCH_ASSOC);
       } catch(Exception $e) {
         die($e->getMessage());

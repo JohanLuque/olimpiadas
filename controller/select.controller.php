@@ -1,7 +1,6 @@
 <?php
 require_once '../model/Olimpiada.php';
 require_once '../model/Disciplina.php';
-require_once '../model/Participante.php';
 
 function renderJSON($object = []){
   if($object){

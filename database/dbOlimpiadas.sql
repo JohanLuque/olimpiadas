@@ -69,8 +69,9 @@ CREATE TABLE integrantes
 
 CREATE TABLE medalleros
 (
-	idmedallero				INT PRIMARY KEY AUTO_INCREMENT,
+	idmedallero			INT PRIMARY KEY AUTO_INCREMENT,
 	idintegrante			INT NOT NULL,
-	puesto 					TINYINT NOT NULL,
+	puesto 				TINYINT NULL,
+	estado				CHAR(1) NOT NULL DEFAULT '0',
 	CONSTRAINT fk_id_med FOREIGN KEY (idintegrante) REFERENCES integrantes (idintegrante)
 ) ENGINE = INNODB;

@@ -45,7 +45,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         </div><!-- fin de goup button -->
       </ul><!-- fin de nav -->
     </div><!-- fin de row -->
-</div> <!-- fin de container -->
+</div> <!-- fin de container  dashboard-->
 
 <div class="container">
     <div class="row mt-5 mb-3">
@@ -90,7 +90,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
 
         </div>
     </div>
-</div><!-- fin de container -->
+</div><!-- fin de container  cards-->
 
 <!-- inicio de modal para registrar-->
 <div class="modal fade" id="modal-premiaciones" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
@@ -101,52 +101,55 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- <form action="" autocomplete="off" id="formulario-eventos">
-          <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="nombre" autofocus maxlength="50">
-            <label for="nombre">Nombre del evento</label>
-          </div>
-          <div class="row mb-3">
-            <div class="mb-3 col-md-6">
-              <label for="sedes">Sedes:</label>
-              <select name="sedes" id="sedes" class="form-select">
-                <option value="">Seleccione</option>
-              </select>
-            </div>
-            <div class="form-floating mb-3 col-md-6">
-              <input type="text" class="form-control" id="fecha" maxlength="4">
-              <label for="fecha">Año de realizacion</label>
-            </div>
-          </div>
-          <label for="disciplina">Disciplinas:</label>
-              <select name="disciplina" id="disciplina" class="form-select">
-                <option value="">Seleccione</option>
-              </select>
+        <form action="" autocomplete="off" id="formulario-premiaciones">
           <div class="row">
-            <div class="mb-3 col-md-4">
-              <label for="oro">Oro:</label>
-              <select name="" id="oro" class="form-select">
-              <option value="">Seleccione</option>
-              </select>
+            <div class="col-md-6 mt-2">
+              <div class="form-floating">
+                <select name="md-fecha" id="md-fecha" class="form-select">
+                  <option value="">Seleccione</option>
+                </select>
+                <label for="md-fecha">Fecha</label>
+              </div>
             </div>
-            <div class="mb-3 col-md-4">
-              <label for="plata">Plata:</label>
-              <select name="" id="plata" class="form-select">
-              <option value="">Seleccione</option>
-              </select>
+            <div class="col-md-6 mt-2">
+              <div class="form-floating">
+                <select name="md-disciplinas" id="md-disciplinas" class="form-select">
+                  <option value="">Seleccione</option>
+                </select>
+                <label for="md-disciplinas">Disciplinas</label>
+              </div>
             </div>
-            <div class="mb-3 col-md-4">
-              <label for="bronce">Bronce:</label>
-              <select name="" id="bronce" class="form-select">
-              <option value="">Seleccione</option>
-              </select>
             </div>
+            <div class="col-md-12 mt-3">
+              <div class="d-grid">
+                <button class="btn btn-warning" type="button" id="equipos">Ver Equipos</button>
+              </div>
           </div>
-        </form> -->
+          <div class="row mt-3">
+            <table class="table table-spriped">
+            <colgroup>
+                <col width="10%"> <!-- # -->
+                <col width="60%"> <!-- titulo -->
+                <col width="30%"> <!-- descripcion -->
+            </colgroup>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Equipo</th>
+                  <th>Posicion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Asincronos -->
+                <div class="alert alert-danger mt-5" role="alert" id="md-alerta"></div>
+              </tbody>
+            </table>
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" id="premiar">Premiar</button>
       </div>
     </div>
   </div>
@@ -162,14 +165,25 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
     const listFecha = document.querySelector("#fecha");
     const btBuscar = document.querySelector("#buscar");
     const alerta = document.querySelector("#alerta");
+    const mdAlerta = document.querySelector("#md-alerta");
+
+    const listaModalFecha = document.querySelector("#md-fecha");
+    const listaModalDisciplina = document.querySelector("#md-disciplinas");
+    const btEquipos = document.querySelector("#equipos");
+    const cuerpoTabla = document.querySelector("tbody");
+    const btPremiar = document.querySelector("#premiar");
+    const formPremiacion = document.querySelector("#formulario-premiaciones");
+
 
     alerta.classList.add('d-none');
+    mdAlerta.classList.add('d-none');
 
-    function listarMedalleros() {
+    function listarDatos(estado, tipo, objetoDisciplina, objetoFecha) {
       const parametros = new URLSearchParams();
       parametros.append("operacion", "listarMedalleros");
-      parametros.append("iddisciplina", parseInt(listDisciplinas.value));
-      parametros.append("idolimpiada", parseInt(listFecha.value));
+      parametros.append("iddisciplina", objetoDisciplina);
+      parametros.append("idolimpiada", objetoFecha);
+      parametros.append("estado", estado);
 
       fetch("../controller/medallero.controller.php", {
         method: 'POST',
@@ -179,32 +193,47 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         .then(datos => {
           alerta.classList.remove('d-block');
           alerta.classList.add('d-none');
-          contenido.innerHTML = '';
-          datos.forEach(element => {
-            const urlImg = "../img/logo.png";
-            let card = `
-            <div class="col">
-              <div class="card mb-3">
-                <img src="${urlImg}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h4 class="card-title text-center">${element.nombreDisciplina}</h4>
-                  <hr>
-                  <h5 class="card-subtitle mb-2">Puesto: ${element.puesto}</h5>
-                  <h6 class="card-subtitle mb-2">Delegacion: ${element.nombreDelegacion}</h6>
-                  <p class="card-text"><small class="text-muted">lugar: ${element.lugar}</small></p>
-                  <p class="card-text text-center"><small class="text-muted">${element.fecha}</small></p>
+          if(tipo == "medalleros"){
+            contenido.innerHTML = '';
+            datos.forEach(element => {
+              let card = `
+              <div class="col">
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <hr>
+                    <h5 class="card-subtitle mb-2">Puesto: ${element.puesto}</h5>
+                    <h6 class="card-subtitle mb-2">Equipo: ${element.equipo}</h6>
+                    <p class="card-text"><small class="text-muted">lugar: ${element.lugar}</small></p>
+                    <p class="card-text text-center"><small class="text-muted">${element.fecha}</small></p>
+                  </div>
                 </div>
               </div>
-            </div>
-            `;
-            contenido.innerHTML += card;
+              `;
+              contenido.innerHTML += card;
           });
-        })
+          }else if(tipo == "participantes"){
+            mdAlerta.classList.remove('d-block');
+            mdAlerta.classList.add('d-none');
+            cuerpoTabla.innerHTML = '';
+            datos.forEach(element => {
+              const fila = `
+                <tr>
+                  <td>${element.idmedallero}</td>
+                  <td>${element.equipo}</td>
+                  <td>
+                    <input type="number" class="puesto form-control form-control-sm" min="0" max="10">
+                  </td>
+                </tr>
+              `;
+              cuerpoTabla.innerHTML += fila;
+            });
+          }
+
+          })
         .catch(erro =>{
-          alertaError();
-          //alert("Nose encuentran los datos");
+          alertaError(tipo);
         });
-    }
+    } 
 
     function listarSelect(operacion = "", objectSelect){
       const parametros = new URLSearchParams();
@@ -224,19 +253,27 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           });
     }
 
-    function alertaError(){
-              contenido.innerHTML = '';
-              alerta.classList.remove('d-none');
-              alerta.classList.add('d-block');
-              alerta.classList.add('alert-danger');
-              alerta.innerHTML = "No hay datos por mostrar";
+    function alertaError(tipo){
+      if(tipo == "medalleros"){
+        contenido.innerHTML = '';
+        alerta.classList.remove('d-none');
+        alerta.classList.add('d-block');
+        alerta.classList.add('alert-danger');
+        alerta.innerHTML = "No hay datos por mostrar"; 
+      }else{
+        cuerpoTabla.innerHTML = '';
+        mdAlerta.classList.remove('d-none');
+        mdAlerta.classList.remove('alert-danger');
+        mdAlerta.classList.add('d-block');
+        mdAlerta.classList.add('alert-success');
+        mdAlerta.innerHTML = "ya tiene datos existentes"; 
+      }
     }
 
-    function rellenar(){
+    function getDisciplinas(id, objectSelect){
         const parametros = new URLSearchParams();
         parametros.append("operacion", "listarDisciplinas");
-        parametros.append("idolimpiada",parseInt(listFecha.value));
-
+        parametros.append("idolimpiada",id);
 
         fetch('../controller/select.controller.php',{
           method: 'POST',
@@ -244,12 +281,12 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         })
         .then(response => response.json())
         .then(datos => {
-          listDisciplinas.innerHTML = `<option value="">Seleccione</option>`;
-          datos.forEach(disciplina => {
-            const option = document.createElement('option');
-            option.value = disciplina[0];
-            option.text = disciplina[1];
-            listDisciplinas.appendChild(option);
+          objectSelect.innerHTML = `<option value="">Seleccione</option>`;
+          datos.forEach(element => {
+            const optionTag = document.createElement('option');
+            optionTag.value = element[0];
+            optionTag.text = element[1];
+            objectSelect.appendChild(optionTag);
           });
         })
         .catch(error => {
@@ -257,11 +294,49 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         });
     }
 
+    function premiar(){
+      const filas = Array.from(cuerpoTabla.children);
+      filas.forEach(element =>{
+        const id = element.cells[0].textContent;
+        const puesto = element.cells[2].querySelector('input').value;
+        
+        const fd = new FormData();
+        fd.append("operacion", "premiarMedallero");
+
+        fd.append("idmedallero", id);
+        fd.append("puesto", puesto);
+
+        fetch("../controller/medallero.controller.php",{
+          method: 'POST',
+          body: fd
+        })
+      })
+      formPremiacion.reset();
+      cuerpoTabla.innerHTML = '';
+    }
+    
+
+
     listarSelect("listarOlimpiadasFecha", listFecha);
+    listarSelect("listarOlimpiadasFecha", listaModalFecha);
 
-    btBuscar.addEventListener("click", listarMedalleros);
 
-    listFecha.addEventListener("change", rellenar);
+    btBuscar.addEventListener("click", function(){
+      listarDatos(1, "medalleros", parseInt(listDisciplinas.value), parseInt(listFecha.value));
+    });
+    btEquipos.addEventListener("click", function(){
+      listarDatos(0, "participantes", parseInt(listaModalDisciplina.value), parseInt(listaModalFecha.value));
+    });
+
+    listFecha.addEventListener("change", function() {
+      getDisciplinas(parseInt(listFecha.value), listDisciplinas);
+    });
+
+    listaModalFecha.addEventListener("change", function(){
+      getDisciplinas(parseInt(listaModalFecha.value), listaModalDisciplina);
+    });
+
+    btPremiar.addEventListener("click", premiar)
 
   });
 </script>

@@ -20,6 +20,7 @@ if(isset($_POST['operacion'])){
     $claveIngresada = $_POST['clave'];
     
     if($data){
+        sleep(1);
         if(password_verify($claveIngresada, $data['clave'])){
             //Registrar datos de acceso
             $acceso["login"] = true;
