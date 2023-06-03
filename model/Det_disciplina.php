@@ -11,14 +11,23 @@ class Det_disciplina extends Conexion{
     }
 
     public function listarDet_disciplinas($id){
-    try{
-        $consulta = $this->conexion->prepare("CALL spu_listar_detDisciplinas(?)");
-        $consulta->execute(array(
-          $id['idolimpiada']
-        ));
+      try{
+          $consulta = $this->conexion->prepare("CALL spu_listar_detDisciplinas(?)");
+          $consulta->execute(array(
+            $id['idolimpiada']
+          ));
+          return $consulta->fetchAll(PDO::FETCH_NUM);
+      }catch(Exception $e){
+        die($e->getMessage());
+      }
+    }
+    public function grafica(){
+      try{
+        $consulta = $this->conexion->prepare("CALL spu_disciplinas_fecha_grafico()");
+        $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_NUM);
     }catch(Exception $e){
       die($e->getMessage());
     }
-  }
+    }
 }

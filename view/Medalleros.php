@@ -180,6 +180,9 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
 
     alerta.classList.add('d-none');
     mdAlerta.classList.add('d-none');
+    function prueba(){
+
+    }
 
     function listarDatos(estado, tipo, objetoDisciplina, objetoFecha) {
       const parametros = new URLSearchParams();
@@ -217,7 +220,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           }else if(tipo == "participantes"){
             mdAlerta.classList.remove('d-block');
             mdAlerta.classList.add('d-none');
-            cuerpoTabla.innerHTML = '';
+            cuerpoTabla.innerHTML = ``;
             datos.forEach(element => {
               const fila = `
                 <tr>
@@ -233,9 +236,9 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           }
 
           })
-        .catch(erro =>{
+        /* .catch(erro =>{
           alertaError(tipo);
-        });
+        }); */
     } 
 
     function listarSelect(operacion = "", objectSelect){
@@ -276,7 +279,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
     function getDisciplinas(id, objectSelect){
         const parametros = new URLSearchParams();
         parametros.append("operacion", "listarDetDisciplinas");
-        parametros.append("idolimpiada",id);
+        parametros.append("idolimpiada", id);
 
         fetch('../controller/select.controller.php',{
           method: 'POST',
@@ -284,6 +287,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         })
         .then(response => response.json())
         .then(datos => {
+          console.log(datos)
           objectSelect.innerHTML = `<option value="">Seleccione</option>`;
           datos.forEach(element => {
             const optionTag = document.createElement('option');
@@ -298,7 +302,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
     }
 
     function premiar(){
-      const filas = Array.from(cuerpoTabla.children);
+      const filas = Array.from(cuerpoTabla.children); // children = contenido de la tabla
       filas.forEach(element =>{
         const id = element.cells[0].textContent;
         const puesto = element.cells[2].querySelector('input').value;

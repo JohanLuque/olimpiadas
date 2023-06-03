@@ -48,16 +48,90 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
   <div class="container">
   <div class="row mt-3">
       <div class="col-md-6">
-        <h1>Reporte 1</h1>
+        <!--Aqui renderizaremos un grafico-->
+        <canvas id="graficoBarras"></canvas>
       </div>
       <div class="col-md-6">
-        <h1>Reporte 2</h1>
+        <!--Aqui renderizaremos un grafico-->
+          <canvas id="graficoCirculo"></canvas>
       </div>
     </div>
   </div>
 
+  <!-- Script de boostrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   
+  <!-- Script de chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
+  <script>
+    document.addEventListener("DOMContentLoaded", () =>{
+      const barras = document.querySelector("#graficoBarras");
+      const circulo = document.querySelector("#graficoCirculo");
+      const olimpiada = document.querySelector("#leyenda-olimpiadas");
+      const leyendaBarras = document.querySelector("#leyenda-olimpiadas");
+      const colores=['red'];
+
+      const graficoIntegrantes = new Chart(circulo,{
+        type: 'pie',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              backgroundColor: colores,
+              label: 'Integrantes por año',
+              data: []
+            }
+          ]
+        }
+      });
+
+      const graficoDisciplinas = new Chart(barras,{
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: ' total de disciplinas por año',
+              data: []
+            }
+          ]
+        }
+      });
+
+
+      function renderGraphic(coleccion = [],objectGrafic){
+        let etiquetas = [];
+        let datos = [];
+
+        coleccion.forEach(element => {
+          etiquetas.push(element[0]);
+          datos.push(element[1]);
+        });
+
+        objectGrafic.data.labels = etiquetas;
+        objectGrafic.data.datasets[0].data = datos;
+        objectGrafic.update();
+      }
+
+      function loadData (operacion, objectGrafic){
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", operacion);
+
+        fetch('../controller/grafico.controller.php', {
+          method: 'POST',
+          body: parametros
+        })
+          .then(response => response.json())
+          .then(lista => {
+            renderGraphic(lista, objectGrafic);
+          })
+      }
+
+    loadData("graficoIntegrantes", graficoIntegrantes);
+    loadData("graficoDisciplinas", graficoDisciplinas);
+
+    });
+  </script>
 </body>
 </html>
