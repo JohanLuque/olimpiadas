@@ -39,7 +39,7 @@ BEGIN
 END $$
 
 DELIMITER $$
-CREATE PROCEDURE spu_listar_disciplinas
+CREATE PROCEDURE spu_listar_detDisciplinas
 (
 IN _idolimpiada INT
 )
@@ -55,20 +55,11 @@ END $$
 DELIMITER $$
 CREATE PROCEDURE spu_listar_olimpiadas()
 BEGIN
-	SELECT idolimpiada, YEAR(fechainicio),CONCAT(nombre, ' - ', YEAR(fechainicio)) AS modal FROM olimpiadas
+	SELECT idolimpiada, YEAR(fechainicio),CONCAT(nombre, ' - ',
+	YEAR(fechainicio)) AS modal 
+	FROM olimpiadas
 	ORDER BY fechainicio DESC;
 END $$
-
-DELIMITER $$
-CREATE PROCEDURE spu_registrar_medallero
-(
-	IN _idparticipante INT,
-	IN _puesto		TINYINT
-)
-BEGIN
-	INSERT INTO medalleros (idparticipante, puesto) VALUES 
-	(_idparticipante, _puesto);
-END$$
 
 
 DELIMITER $$
@@ -83,6 +74,55 @@ BEGIN
 		estado = '1'
 	WHERE idmedallero = _idmedallero;
 END $$
+
+-- CRUD	
+DELIMITER $$
+CREATE PROCEDURE spu_listar_disciplinas()
+BEGIN 
+	SELECT * FROM disciplinas
+	WHERE estado = '1'
+	ORDER BY iddisciplina DESC;
+END $$
+
+DELIMITER $$
+CREATE PROCEDURE spu_registrar_disciplina
+(IN _nombreDisciplina VARCHAR(50))
+BEGIN 
+	INSERT INTO disciplinas (nombreDisciplina) VALUE
+	(_nombreDisciplina);
+END $$
+
+DELIMITER $$
+CREATE PROCEDURE spu_obtener_disciplinas
+(IN _iddisciplina INT)
+BEGIN
+	SELECT * FROM disciplinas
+		WHERE iddisciplina = _iddisciplina;
+END $$
+
+DELIMITER $$
+CREATE PROCEDURE spu_editar_disciplinas
+(
+IN _iddisciplina INT,
+IN _nombreDisciplina VARCHAR(50)
+)
+BEGIN
+	UPDATE disciplinas SET
+		nombreDisciplina = _nombreDisciplina
+	WHERE iddisciplina = _iddisciplina;
+END $$
+
+DELIMITER $$
+CREATE PROCEDURE spu_eliminar_disciplinas
+(
+IN _iddisciplina INT
+)
+BEGIN
+	UPDATE disciplinas SET
+		estado = '0'
+	WHERE iddisciplina = _iddisciplina;
+END $$
+
 
 
 

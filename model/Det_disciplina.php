@@ -2,7 +2,7 @@
 
 require_once 'Conexion.php';
 
-class Det_evento extends Conexion{
+class Det_disciplina extends Conexion{
 
     private $conexion;
 
@@ -10,10 +10,12 @@ class Det_evento extends Conexion{
         $this->conexion = parent::getConexion();
     }
 
-    public function listarParticipantes($id){
+    public function listarDet_disciplinas($id){
     try{
-        $consulta = $this->conexion->prepare("CALL spu_ver_detEvento(?)");
-        $consulta->execute(array($id));
+        $consulta = $this->conexion->prepare("CALL spu_listar_detDisciplinas(?)");
+        $consulta->execute(array(
+          $id['idolimpiada']
+        ));
         return $consulta->fetchAll(PDO::FETCH_NUM);
     }catch(Exception $e){
       die($e->getMessage());

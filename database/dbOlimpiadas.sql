@@ -14,6 +14,7 @@ CREATE TABLE disciplinas
 (
 	iddisciplina		INT PRIMARY KEY AUTO_INCREMENT,
 	nombreDisciplina	VARCHAR(50) NOT NULL,
+	estado			CHAR(1) NOT NULL DEFAULT '1',
 	CONSTRAINT uk_disciplinas UNIQUE (nombreDisciplina)
 ) ENGINE = INNODB;
 

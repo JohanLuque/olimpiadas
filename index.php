@@ -122,6 +122,7 @@ if(isset($_SESSION['seguridad']) && $_SESSION['seguridad']['login']){
           clave.focus();
         }
       });
+      
       function validar(event){
         if (!form.checkValidity()){
           event.preventDefault();
