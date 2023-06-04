@@ -70,7 +70,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
       const circulo = document.querySelector("#graficoCirculo");
       const olimpiada = document.querySelector("#leyenda-olimpiadas");
       const leyendaBarras = document.querySelector("#leyenda-olimpiadas");
-      const colores=['red'];
+      const colores=['#ff2d14', '#ff9f00', '#8fff0a', '#0ff5ff', '#d222ff'];
 
       const graficoIntegrantes = new Chart(circulo,{
         type: 'pie',
@@ -92,6 +92,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           labels: [],
           datasets: [
             {
+              backgroundColor: colores,
               label: ' total de disciplinas por año',
               data: []
             }

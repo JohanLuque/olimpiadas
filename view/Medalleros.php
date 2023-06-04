@@ -14,9 +14,6 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premiaciones</title>
 
-    <!-- Estilos personalizados -->
-    <link rel="stylesheet" href="../css/stilos.css">
-
     <!-- Bootstrap v5.2 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
@@ -180,9 +177,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
 
     alerta.classList.add('d-none');
     mdAlerta.classList.add('d-none');
-    function prueba(){
-
-    }
+    
 
     function listarDatos(estado, tipo, objetoDisciplina, objetoFecha) {
       const parametros = new URLSearchParams();
@@ -236,9 +231,9 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           }
 
           })
-        /* .catch(erro =>{
+        .catch(erro =>{
           alertaError(tipo);
-        }); */
+        });
     } 
 
     function listarSelect(operacion = "", objectSelect){
@@ -329,10 +324,10 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
 
 
     btBuscar.addEventListener("click", function(){
-      listarDatos(1, "medalleros", parseInt(listDisciplinas.value), parseInt(listFecha.value));
+      listarDatos("1", "medalleros", parseInt(listDisciplinas.value), parseInt(listFecha.value));
     });
     btEquipos.addEventListener("click", function(){
-      listarDatos(0, "participantes", parseInt(listaModalDisciplina.value), parseInt(listaModalFecha.value));
+      listarDatos("0", "participantes", parseInt(listaModalDisciplina.value), parseInt(listaModalFecha.value));
     });
 
     listFecha.addEventListener("change", function() {

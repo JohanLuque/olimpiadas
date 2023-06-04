@@ -33,12 +33,10 @@ BEGIN
 	INNER JOIN olimpiadas ON olimpiadas.`idolimpiada` = det_disciplinas.`idolimpiada`
 	INNER JOIN disciplinas ON disciplinas.`iddisciplina` =  det_disciplinas.`iddisciplina`
 	WHERE disciplinas.`iddisciplina` = 6/*_iddisciplina*/  AND olimpiadas.`idolimpiada` = 2/* _idolimpiada*/
-	AND medalleros.estado = '0' -- _estado
+	AND medalleros.estado = _estado
 		-- GROUP BY disciplinas.`nombreDisciplina`
 		ORDER BY puesto;
 END $$
-
-SELECT * FROM disciplinas
 
 DELIMITER $$
 CREATE PROCEDURE spu_listar_detDisciplinas
@@ -46,7 +44,7 @@ CREATE PROCEDURE spu_listar_detDisciplinas
 IN _idolimpiada INT
 )
 BEGIN
-	SELECT iddet, disciplinas.`nombreDisciplina`
+	SELECT disciplinas.iddisciplina , disciplinas.`nombreDisciplina`
 	FROM det_disciplinas
 	INNER JOIN  disciplinas ON disciplinas.`iddisciplina` = det_disciplinas.`iddisciplina`
 	INNER JOIN olimpiadas ON olimpiadas.`idolimpiada` = det_disciplinas.`idolimpiada`
@@ -139,11 +137,11 @@ END $$
 DELIMITER $$
 CREATE PROCEDURE spu_integrantes_fecha_grafico() 
 BEGIN 
-	SELECT 
-	olimpiadas.`nombre`, COUNT(integrantes.`idintegrante`)
+	SELECT olimpiadas.nombre, COUNT(olimpiadas.idolimpiada)
 	FROM integrantes
-	INNER JOIN det_disciplinas ON det_disciplinas.`iddet` = integrantes.`iddet`
-	INNER JOIN olimpiadas ON olimpiadas.`idolimpiada` = integrantes.`iddet` 
-	GROUP BY olimpiadas.`nombre`
+	INNER JOIN  det_disciplinas ON det_disciplinas.iddet = integrantes.iddet
+	INNER JOIN olimpiadas ON olimpiadas.idolimpiada =  det_disciplinas.idolimpiada
+	GROUP BY olimpiadas.nombre
 	ORDER BY olimpiadas.`nombre`;
 END $$
+
