@@ -32,7 +32,7 @@ BEGIN
 	INNER JOIN det_disciplinas ON det_disciplinas.`iddet` =  integrantes.`iddet`
 	INNER JOIN olimpiadas ON olimpiadas.`idolimpiada` = det_disciplinas.`idolimpiada`
 	INNER JOIN disciplinas ON disciplinas.`iddisciplina` =  det_disciplinas.`iddisciplina`
-	WHERE disciplinas.`iddisciplina` = 6/*_iddisciplina*/  AND olimpiadas.`idolimpiada` = 2/* _idolimpiada*/
+	WHERE disciplinas.`iddisciplina` = _iddisciplina  AND olimpiadas.`idolimpiada` =  _idolimpiada
 	AND medalleros.estado = _estado
 		-- GROUP BY disciplinas.`nombreDisciplina`
 		ORDER BY puesto;

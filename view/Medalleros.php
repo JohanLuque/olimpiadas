@@ -81,6 +81,10 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         </div>
       </div>
     </div>
+    
+    <div class="d-grid mt-3">
+        <button class="btn btn-primary" type="button" id="exportar">Exportar PDF</button>
+      </div>
 
     <div class="alert alert-danger mt-5" role="alert" id="alerta"></div>
 
@@ -173,8 +177,10 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
     const cuerpoTabla = document.querySelector("tbody");
     const btPremiar = document.querySelector("#premiar");
     const formPremiacion = document.querySelector("#formulario-premiaciones");
-
-
+    
+    const btExportar = document.querySelector("#exportar");
+    
+    btExportar.classList.add('d-none')
     alerta.classList.add('d-none');
     mdAlerta.classList.add('d-none');
     
@@ -211,6 +217,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
               </div>
               `;
               contenido.innerHTML += card;
+              configExportar();
           });
           }else if(tipo == "participantes"){
             mdAlerta.classList.remove('d-block');
@@ -233,6 +240,7 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
           })
         .catch(erro =>{
           alertaError(tipo);
+          btExportar.classList.add('d-none')
         });
     } 
 
@@ -269,6 +277,11 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         mdAlerta.classList.add('alert-success');
         mdAlerta.innerHTML = "ya tiene datos existentes"; 
       }
+    }
+
+    function configExportar(){
+      btExportar.classList.remove('d-none');
+      btExportar.classList.add('d-block');
     }
 
     function getDisciplinas(id, objectSelect){
@@ -316,8 +329,16 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
       formPremiacion.reset();
       cuerpoTabla.innerHTML = '';
     }
-    
 
+    function generarPDF(){
+      const parametros = new URLSearchParams();
+      parametros.append("iddisciplina", parseInt(listDisciplinas.value));
+      parametros.append("idolimpiada", parseInt(listFecha.value));
+      parametros.append("estado", "1");
+      parametros.append("titulo", listDisciplinas.options[listDisciplinas.selectedIndex].text +
+      " - " + listFecha.options[listFecha.selectedIndex].text);
+      window.open(`../report/medallero.reporte.php?${parametros}`, '_blank');
+    }
 
     listarSelect("listarOlimpiadasFecha", listFecha);
     listarSelect("listarOlimpiadasFecha", listaModalFecha);
@@ -338,7 +359,8 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
       getDisciplinas(parseInt(listaModalFecha.value), listaModalDisciplina);
     });
 
-    btPremiar.addEventListener("click", premiar)
+    btPremiar.addEventListener("click", premiar);
+    btExportar.addEventListener("click", generarPDF);
 
   });
 </script>

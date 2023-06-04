@@ -34,4 +34,13 @@ Class Medallero extends Conexion{
         die($e->getMessage());
       }
     }
+    public function exportarMedalleros($iddisciplina=0, $idolimpiada=0, $estado=""){
+      try {
+          $consulta = $this->conexion->prepare(" CALL spu_lista_medallero(?,?,?)");
+          $consulta->execute(array($iddisciplina, $idolimpiada, $estado));
+          return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch(Exception $e) {
+          die($e->getMessage());
+        }
+    }
 }
