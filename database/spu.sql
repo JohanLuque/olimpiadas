@@ -145,3 +145,18 @@ BEGIN
 	ORDER BY olimpiadas.`nombre`;
 END $$
 
+DELIMITER $$
+CREATE PROCEDURE spu_registrar_olimpiadas
+(	
+IN _nombre VARCHAR(50),
+IN _fechainicio DATE,
+IN _fechafin DATE,
+IN _lugar VARCHAR(50)
+)
+BEGIN 
+	IF _fechainicio = '' THEN SET _fechainicio = NULL;  END IF;
+	
+	INSERT INTO olimpiadas(nombre, fechainicio, fechafin, lugar) VALUES
+	(_nombre, _fechainicio, _fechafin, _lugar);
+END $$
+
