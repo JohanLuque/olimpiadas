@@ -1,11 +1,4 @@
-<?php
-
-session_start();
-
-if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
-  header('location: ../index.php');
-}
-?>
+<?php include_once 'config.php'?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,24 +48,27 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
     </div>
     <div class="row mt-3">
         <div class="col-md-6"><!-- Tabla Disciplinas-->
-            <table id="tabla-disciplinas" class="table table-sm table-striped">
-                <colgroup>
-                    <col width="10%"> <!-- # -->
-                    <col width="60%"> <!-- titulo -->
-                    <col width="30%"> <!-- descripcion -->
-                </colgroup>
-                <thead class="table-secondary">
-                    <tr>
-                    <th>#</th>
-                    <th>Nombre de disciplina</th>
-                    <th>Editar / Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                  </tbody>
-                </table>
-                <div class="alert alert-danger" role="alert" id="alerta"></div>
+          <div class="d-grid mb-3">
+            <button class="btn btn-primary" type="button" id="exportar">Exportar PDF</button>
+          </div>
+          <table id="tabla-disciplinas" class="table table-sm table-striped">
+            <colgroup>
+              <col width="10%"> <!-- # -->
+              <col width="60%"> <!-- titulo -->
+              <col width="30%"> <!-- descripcion -->
+            </colgroup>
+            <thead class="table-secondary">
+              <tr>
+              <th>#</th>
+              <th>Nombre de disciplina</th>
+              <th>Editar / Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+            </tbody>
+          </table>
+          <div class="alert alert-danger" role="alert" id="alerta"></div>
         </div>
 
         <div class="col-md-6"> <!-- Formulario de registro-->
@@ -108,6 +104,8 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
   const txtNombre = document.querySelector("#nombre");
   const btGuardar = document.querySelector("#guardar");
   const btCancelar = document.querySelector("#cancelar");
+
+  const btExportar = document.querySelector("#exportar");
 
   alerta.classList.add('d-none');
 
@@ -221,6 +219,12 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
     alerta.innerHTML = "No hay datos por mostrar"; 
   }
 
+  function generarPDF(){
+      const parametros = new URLSearchParams();
+      parametros.append("titulo", "Disciplinas");
+      window.open(`../report/disciplina.reporte.php?${parametros}`, '_blank');
+  }
+
   renderData();
 
   //Proceso de edicion
@@ -277,6 +281,8 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
   btGuardar.addEventListener("click", validar);
 
   btCancelar.addEventListener("click",reset);
+
+  btExportar.addEventListener("click", generarPDF);
 
   });
 </script>

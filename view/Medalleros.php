@@ -1,11 +1,4 @@
-<?php
-
-session_start();
-
-if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
-  header('location: ../index.php');
-}
-?>
+<?php include_once 'config.php'?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,8 +76,8 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
     </div>
     
     <div class="d-grid mt-3">
-        <button class="btn btn-primary" type="button" id="exportar">Exportar PDF</button>
-      </div>
+      <button class="btn btn-primary" type="button" id="exportar">Exportar PDF</button>
+    </div>
 
     <div class="alert alert-danger mt-5" role="alert" id="alerta"></div>
 
@@ -295,7 +288,6 @@ if(!isset($_SESSION['seguridad']) || $_SESSION['seguridad']['login'] == false){
         })
         .then(response => response.json())
         .then(datos => {
-          console.log(datos)
           objectSelect.innerHTML = `<option value="">Seleccione</option>`;
           datos.forEach(element => {
             const optionTag = document.createElement('option');

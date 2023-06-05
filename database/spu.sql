@@ -79,7 +79,7 @@ END $$
 DELIMITER $$
 CREATE PROCEDURE spu_listar_disciplinas()
 BEGIN 
-	SELECT * FROM disciplinas
+	SELECT iddisciplina, nombreDisciplina FROM disciplinas
 	WHERE estado = '1'
 	ORDER BY iddisciplina DESC;
 END $$
