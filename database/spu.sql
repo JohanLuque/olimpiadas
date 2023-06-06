@@ -19,23 +19,22 @@ IN _idolimpiada INT,
 IN _estado CHAR(1)
 )
 BEGIN
-	SELECT idmedallero, CONCAT (personas.`apellidos`, ' ', personas.`nombres`) AS nommbreCompleto,
+	SELECT idmedallero,
 	disciplinas.`nombreDisciplina`, delegaciones.`nombreDelegacion` AS equipo,
 	puesto, 
 	YEAR(olimpiadas.`fechainicio`) AS fecha,
 	olimpiadas.`lugar` AS lugar
 	FROM medalleros
 	INNER JOIN integrantes ON integrantes.idintegrante = medalleros.idintegrante
-	INNER JOIN equipos ON equipos.`idequipo`  = integrantes.`idintegrante`
-	INNER JOIN personas ON personas.idpersona = equipos.idparticipante
-	INNER JOIN delegaciones ON delegaciones.iddelegacion = equipos.iddelegacion
-	INNER JOIN det_disciplinas ON det_disciplinas.`iddet` =  integrantes.`iddet`
-	INNER JOIN olimpiadas ON olimpiadas.`idolimpiada` = det_disciplinas.`idolimpiada`
-	INNER JOIN disciplinas ON disciplinas.`iddisciplina` =  det_disciplinas.`iddisciplina`
+	INNER JOIN equipos ON equipos.`idequipo` = integrantes.`idequipo`
+	INNER JOIN delegaciones ON delegaciones.iddelegacion = equipos.`iddelegacion`
+	INNER JOIN det_disciplinas ON det_disciplinas.`iddet` = integrantes.`iddet`
+	INNER JOIN olimpiadas ON olimpiadas.idolimpiada = det_disciplinas.idolimpiada
+	INNER JOIN disciplinas ON disciplinas.iddisciplina = det_disciplinas.iddisciplina
 	WHERE disciplinas.`iddisciplina` = _iddisciplina  AND olimpiadas.`idolimpiada` =  _idolimpiada
 	AND medalleros.estado = _estado
 		-- GROUP BY disciplinas.`nombreDisciplina`
-		ORDER BY puesto;
+	ORDER BY CASE WHEN puesto IS NULL THEN 1 ELSE 0 END, puesto;
 END $$
 
 DELIMITER $$
@@ -69,6 +68,8 @@ IN _idmedallero INT,
 IN _puesto TINYINT 
 )
 BEGIN 
+	IF _puesto = '' THEN SET _puesto = NULL;  END IF;
+
 	UPDATE medalleros SET
 		puesto  = _puesto,
 		estado = '1'
@@ -172,3 +173,29 @@ BEGIN
 	INSERT INTO det_disciplinas (idolimpiada, iddisciplina) VALUES
 	(_idolimpiada, _iddisciplina);
 END $$
+
+DELIMITER $$
+CREATE PROCEDURE spu_listar_equipos()
+BEGIN
+	SELECT idequipo, delegaciones.`nombreDelegacion` 
+	FROM equipos
+	INNER JOIN delegaciones ON delegaciones.`iddelegacion` = equipos.`iddelegacion`
+	GROUP BY delegaciones.`nombreDelegacion`
+	ORDER BY delegaciones.`nombreDelegacion`;
+END $$ 
+
+DELIMITER $$
+CREATE PROCEDURE spu_registrar_integrantes
+(
+IN _idequipo INT,
+IN _iddet INT 
+)
+BEGIN 
+	DECLARE _nuevo INT;
+	INSERT INTO integrantes(idequipo, iddet) VALUES
+	(_idequipo, _iddet);
+	SET _nuevo  = LAST_INSERT_ID();
+	INSERT INTO medalleros (idintegrante) VALUE
+	(_nuevo);
+END $$
+

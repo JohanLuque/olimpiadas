@@ -44,8 +44,8 @@ class Det_disciplina extends Conexion{
           $datos["iddisciplina"]
         ));
       }catch(Exception $e){
-        //$respuesta["message"] = "No se ha podido completar el proceso. Código de error: " . $e->getCode();
-        $respuesta["message"] = "No se ha podido completar el proceso. Código de error: " . $e->getMessage();
+        $respuesta["message"] = "No se ha podido completar el proceso. Código de error: " . $e->getCode();
+        //$respuesta["message"] = "No se ha podido completar el proceso. Código de error: " . $e->getMessage();
       }
       return $respuesta;
     }

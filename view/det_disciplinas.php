@@ -1,4 +1,4 @@
-<!-- <?php include_once 'config.php'?> -->
+<?php include_once 'config.php'?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,11 +18,21 @@
           <a class="nav-link text-dark" aria-current="page" href="./Dashboard.php">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active bg-warning" href="./Medalleros.php">Premiaciones</a>
+          <a class="nav-link text-dark" href="./Medalleros.php">Premiaciones</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" aria-current="page" href="./Disciplinas.php">Disciplinas</a>
         </li>
+        <div class="btn-group bg-warning" role="group">
+          <button id="btnGroupDrop1" type="button" class="btn  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Registros
+          </button>
+          <div class="dropdown-menu" aria-labelledby="triggerId">
+              <a class="dropdown-item" href="./olimpiadas.php">Olimpiadas</a>
+              <a class="dropdown-item" href="./det_disciplinas.php">disciplinas a olimpiadas</a>
+              <a class="dropdown-item" href="./integrantes.php">Integranes</a>
+            </div>
+        </div><!-- fin de goup button -->
         <div class="btn-group" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <?php
@@ -42,7 +52,7 @@
 
 <div class="container">
   <div class="mt-3">
-    <h1>selecion de Disciplinas por año</h1>
+    <h1>Selección de disciplinas por año</h1>
     <hr>
   </div>
   <form action="" autocomplete="off" id="formulario-registro" class="form-control needs-validation" novalidate>
@@ -117,7 +127,7 @@
         });
       }
 
-      function add() {
+      function agregar() {
         if (listDisciplinas.value) {
           const opcion = listDisciplinas.options[listDisciplinas.selectedIndex];
           filtro.appendChild(opcion);
@@ -125,7 +135,7 @@
         }
       }
 
-      function remove() {
+      function remover() {
         if (filtro.value) {
           const opcion = filtro.options[filtro.selectedIndex];
           listDisciplinas.appendChild(opcion);
@@ -148,6 +158,7 @@
             body: parametros
           })
         })
+        alert("Registrado correctamente")
         reset();
         
       }
@@ -164,18 +175,18 @@
         if (!formulario.checkValidity()){
           event.preventDefault();
           event.stopPropagation();
+          formulario.classList.add('was-validated');
         }else{
           registrar();
         }
-        formulario.classList.add('was-validated');
       }
       
       listarSelect("listar", listFecha , '../controller/olimpiada.controller.php');
       listarSelect("listarDisciplinas", listDisciplinas, '../controller/disciplina.controller.php');
 
 
-      listDisciplinas.addEventListener("click", add);
-      filtro.addEventListener("click", remove);
+      listDisciplinas.addEventListener("click", agregar);
+      filtro.addEventListener("click", remover);
       btGuardar.addEventListener("click", validar)
       btCancelar.addEventListener("click", reset)
     });

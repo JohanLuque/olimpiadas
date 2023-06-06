@@ -25,6 +25,16 @@
           <a class="nav-link active bg-warning" aria-current="page" href="./Disciplinas.php">Disciplinas</a>
         </li>
         <div class="btn-group" role="group">
+          <button id="btnGroupDrop1" type="button" class="btn  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Registros
+          </button>
+          <div class="dropdown-menu" aria-labelledby="triggerId">
+              <a class="dropdown-item" href="./olimpiadas.php">Olimpiadas</a>
+              <a class="dropdown-item" href="./det_disciplinas.php">disciplinas a olimpiadas</a>
+              <a class="dropdown-item" href="./integrantes.php">Integranes</a>
+            </div>
+        </div><!-- fin de goup button -->
+        <div class="btn-group" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <?php
                     if (isset($_SESSION['seguridad']) && $_SESSION['seguridad']['login']) {

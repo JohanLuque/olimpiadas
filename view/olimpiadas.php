@@ -1,4 +1,4 @@
-<!-- <?php include_once 'config.php'?> -->
+<?php include_once 'config.php'?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,11 +18,21 @@
           <a class="nav-link text-dark" aria-current="page" href="./Dashboard.php">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active bg-warning" href="./Medalleros.php">Premiaciones</a>
+          <a class="nav-link text-dark" href="./Medalleros.php">Premiaciones</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" aria-current="page" href="./Disciplinas.php">Disciplinas</a>
         </li>
+        <div class="btn-group bg-warning" role="group">
+          <button id="btnGroupDrop1" type="button" class="btn  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Registros
+          </button>
+          <div class="dropdown-menu" aria-labelledby="triggerId">
+              <a class="dropdown-item" href="./olimpiadas.php">Olimpiadas</a>
+              <a class="dropdown-item" href="./det_disciplinas.php">disciplinas a olimpiadas</a>
+              <a class="dropdown-item" href="./integrantes.php">Integranes</a>
+            </div>
+        </div><!-- fin de goup button -->
         <div class="btn-group" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <?php

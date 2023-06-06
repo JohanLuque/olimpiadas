@@ -43,7 +43,7 @@ class Olimpiada extends Conexion{
 
   public function listar(){
     try{
-        $consulta = $this->conexion->prepare("SELECT * FROM olimpiadas");
+        $consulta = $this->conexion->prepare("SELECT * FROM olimpiadas order by nombre desc");
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_NUM);
     }catch(Exception $e){
