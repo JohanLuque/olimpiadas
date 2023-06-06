@@ -159,4 +159,16 @@ BEGIN
 	INSERT INTO olimpiadas(nombre, fechainicio, fechafin, lugar) VALUES
 	(_nombre, _fechainicio, _fechafin, _lugar);
 END $$
-
+-- select * from olimpiadas
+-- select * from disciplinas
+-- select * from det_disciplinas
+DELIMITER $$
+CREATE PROCEDURE spu_registar_Detdisciplina
+(
+IN _idolimpiada INT, 
+IN _iddisciplina INT
+)
+BEGIN
+	INSERT INTO det_disciplinas (idolimpiada, iddisciplina) VALUES
+	(_idolimpiada, _iddisciplina);
+END $$

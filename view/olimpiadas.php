@@ -83,7 +83,7 @@
                         <div class="invalid-feedback">Ingrese una fecha</div>
                     </div>
                     <div class="form-floating mt-3">
-                        <input type="date" class="form-control" id="fin" placeholder="fin" maxlength="50" required>
+                        <input type="date" class="form-control" id="fin" placeholder="fin" maxlength="50">
                         <label for="fin">Fecha de fin</label>
                     </div>
                     <div class="form-floating mt-3">
@@ -110,71 +110,94 @@
         const dateInicio = document.querySelector("#inicio");
         const dateFin = document.querySelector("#fin");
         const lugar = document.querySelector("#lugar");
+        const formulario = document.querySelector("#formulario-olimpiadas");
         const btGuardar = document.querySelector("#guardar");
+        const btCancelar = document.querySelector("#cancelar");
 
+        const alerta = document.querySelector("#alerta");
 
-            function renderData(){
-                const parametros = new URLSearchParams();
-                parametros.append("operacion", "listar");
+        alerta.classList.add('d-none');
 
-                fetch("../controller/olimpiada.controller.php",{
+        function renderData(){
+            const parametros = new URLSearchParams();
+            parametros.append("operacion", "listar");
+
+            fetch("../controller/olimpiada.controller.php",{
+            method: 'POST',
+            body: parametros
+            })
+            .then(response => response.json())
+            .then(datos =>{
+                tabla.innerHTML = '';
+                datos.forEach(element => {
+                let fila = `
+                <tr>
+                    <td>${element[0]}</td>
+                    <td>${element[1]}</td>
+                    <td>${element[2]}</td>
+                    <td>${element[3]}</td>
+                    <td>${element[4]}</td>
+                </tr>
+                `;
+                tabla.innerHTML += fila;
+                })
+            })
+            .catch(erro=>{
+                alertaError();
+            })
+        }
+
+        function registro(){
+            if(confirm("¿Desea guardar los datos?")){
+            const parametros = new FormData();
+            parametros.append("operacion", "RegistrarOlimpiada");
+            parametros.append("nombre", txtNombre.value);
+            parametros.append("fechainicio", dateInicio.value);
+            parametros.append("fechafin", dateFin.value);
+            parametros.append("lugar", lugar.value);
+
+            fetch("../controller/olimpiada.controller.php",{
                 method: 'POST',
                 body: parametros
-                })
+            })
                 .then(response => response.json())
-                .then(datos =>{
-                    tabla.innerHTML = '';
-                    datos.forEach(element => {
-                    let fila = `
-                    <tr>
-                        <td>${element[0]}</td>
-                        <td>${element[1]}</td>
-                        <td>${element[2]}</td>
-                        <td>${element[3]}</td>
-                        <td>${element[4]}</td>
-                    </tr>
-                    `;
-                    tabla.innerHTML += fila;
-                    })
-                })
-                /* .catch(erro=>{
-                    alertaError();
-                }) */
-            }
-
-            function registro(){
-                if(confirm("¿Desea guardar los datos?")){
-                const parametros = new FormData();
-                parametros.append("operacion", "RegistrarOlimpiada");
-                parametros.append("nombre", txtNombre.value);
-                parametros.append("fechainicio", dateInicio.value);
-                parametros.append("fechafin", dateFin.value);
-                parametros.append("lugar", lugar.value);
-
-                fetch("../controller/olimpiada.controller.php",{
-                    method: 'POST',
-                    body: parametros
-                })
-                    .then(response => response.json())
-                    .then(datos => {
-                    if(datos.status){
-                        reset();
-                    }else{
-                        alert(datos.message);
-                    }
-                    })
+                .then(datos => {
+                if(datos.status){
+                    reset();
+                }else{
+                    alert(datos.message);
                 }
+                })
             }
-        
+        }
 
-            function reset(){
-                renderData();
-                document.querySelector("#formulario-olimpiadas").reset();
-                /* formulario.classList.remove('was-validated'); */
+        function validar(event){
+            if (!formulario.checkValidity()){
+            event.preventDefault();
+            event.stopPropagation();
+            }else{
+            registro();
             }
+            formulario.classList.add('was-validated');
+        }
+    
+
+        function reset(){
+            renderData();
+            formulario.reset();
+            formulario.classList.remove('was-validated');
+        }
+        function alertaError(){
+            alerta.classList.remove('d-none');
+            alerta.classList.add('d-block');
+            alerta.classList.add('alert-danger');
+            alerta.innerHTML = "No hay datos por mostrar"; 
+        
+        }
 
         renderData();
-        btGuardar.addEventListener("click", registro);
+        btGuardar.addEventListener("click", validar);
+        btCancelar.addEventListener("click", reset);
     });
 </script>
 </body>

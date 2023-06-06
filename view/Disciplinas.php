@@ -168,7 +168,7 @@
   function reset(){
     btGuardar.innerText = "Guardar";
     renderData();
-    document.querySelector("#formulario-disciplinas").reset();
+    formulario.reset();
     formulario.classList.remove('was-validated');
   }
 
